@@ -75,6 +75,9 @@ async function main() {
     // 蛋类
     { name: '鸡蛋', category: '蛋类', unit: '个' },
     { name: '鸭蛋', category: '蛋类', unit: '个' },
+    // 其他生鲜
+    { name: '豆腐', category: '其他生鲜', unit: '斤' },
+    { name: '年糕', category: '其他生鲜', unit: '斤' },
   ]
   for (const p of products) {
     await prisma.product.create({ data: p }).catch(() => {})
