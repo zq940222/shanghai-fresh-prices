@@ -26,11 +26,11 @@ export async function runScraperJob() {
         create: { name: row.district },
       })
 
-      // scraper data: local origin, ungraded quality
+      const originName = row.origin ?? '本地'
       const origin = await prisma.origin.upsert({
-        where: { name: '本地' },
+        where: { name: originName },
         update: {},
-        create: { name: '本地', province: '上海' },
+        create: { name: originName, province: originName },
       })
 
       const quality = await prisma.qualityGrade.upsert({
@@ -52,7 +52,7 @@ export async function runScraperJob() {
         update: {
           wholesalePrice: row.wholesalePrice,
           retailPrice: row.retailPrice,
-          source: 'scraper',
+          source: row.source,
         },
         create: {
           productId: product.id,
@@ -62,7 +62,7 @@ export async function runScraperJob() {
           wholesalePrice: row.wholesalePrice,
           retailPrice: row.retailPrice,
           priceDate: startOfDay(row.date),
-          source: 'scraper',
+          source: row.source,
         },
       })
 

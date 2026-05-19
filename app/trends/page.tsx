@@ -70,6 +70,19 @@ export default function TrendsPage() {
 
       {error ? <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
       <TrendChart data={points} />
+
+      <p className="text-xs text-zinc-400">
+        数据来源：
+        <a
+          href="https://cif.mofcom.gov.cn"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-zinc-600"
+        >
+          商务部流通产业促进中心（cif.mofcom.gov.cn）
+        </a>
+        ，批发价格每日更新，零售价为批发价估算（×1.35）。
+      </p>
     </div>
   )
 }

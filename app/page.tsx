@@ -10,6 +10,7 @@ interface ApiPriceRow {
   wholesalePrice: number | string
   retailPrice: number | string
   priceDate: string
+  source: string
   product: { name: string; category: string; unit: string }
   district: { name: string }
 }
@@ -55,6 +56,7 @@ export default function Home() {
             unit: row.product.unit,
             market: row.district.name,
             date: new Date(row.priceDate).toISOString().split('T')[0],
+            source: row.source,
           }))
         )
       } catch (loadError) {
@@ -111,6 +113,19 @@ export default function Home() {
       ) : (
         <PriceTable rows={filteredRows} />
       )}
+
+      <p className="text-xs text-zinc-400">
+        数据来源：
+        <a
+          href="https://cif.mofcom.gov.cn"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline hover:text-zinc-600"
+        >
+          商务部流通产业促进中心（cif.mofcom.gov.cn）
+        </a>
+        ，批发价格每日更新，零售价为批发价估算（×1.35）。
+      </p>
     </div>
   )
 }

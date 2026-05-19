@@ -10,9 +10,10 @@ export interface PriceTableRow {
   unit: string
   market: string
   date: string
+  source: string
 }
 
-type SortKey = keyof Omit<PriceTableRow, 'id'>
+type SortKey = keyof Omit<PriceTableRow, 'id' | 'source'>
 
 interface PriceTableProps {
   rows: PriceTableRow[]
@@ -32,6 +33,21 @@ const COLUMN_LABELS: Record<SortKey, string> = {
   date: '日期',
 }
 
+const SOURCE_LABELS: Record<string, { label: string; className: string }> = {
+  mofcom:  { label: '商务部',  className: 'bg-blue-100 text-blue-700' },
+  xinfadi: { label: '新发地',  className: 'bg-amber-100 text-amber-700' },
+  manual:  { label: '手动录入', className: 'bg-zinc-100 text-zinc-600' },
+}
+
+function SourceBadge({ source }: { source: string }) {
+  const s = SOURCE_LABELS[source] ?? { label: source, className: 'bg-zinc-100 text-zinc-600' }
+  return (
+    <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${s.className}`}>
+      {s.label}
+    </span>
+  )
+}
+
 export default function PriceTable({ rows }: PriceTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>('date')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
@@ -44,6 +60,7 @@ export default function PriceTable({ rows }: PriceTableProps) {
     { key: 'market' },
     { key: 'date' },
   ]
+  const colSpan = columns.length + 1
 
   function toggleSort(nextKey: SortKey) {
     if (sortKey === nextKey) {
@@ -85,6 +102,7 @@ export default function PriceTable({ rows }: PriceTableProps) {
                   </button>
                 </th>
               ))}
+              <th className="px-4 py-3 font-medium">数据来源</th>
             </tr>
           </thead>
           <tbody>
@@ -97,11 +115,12 @@ export default function PriceTable({ rows }: PriceTableProps) {
                   <td className="px-4 py-3 text-zinc-600">{row.unit}</td>
                   <td className="px-4 py-3 text-zinc-600">{row.market}</td>
                   <td className="px-4 py-3 text-zinc-600">{row.date}</td>
+                  <td className="px-4 py-3"><SourceBadge source={row.source} /></td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-8 text-center text-zinc-500">
+                <td colSpan={colSpan} className="px-4 py-8 text-center text-zinc-500">
                   暂无价格数据，请先录入或等待抓取任务运行。
                 </td>
               </tr>

@@ -11,6 +11,7 @@ const rows = [
     unit: '斤',
     market: '浦东新区',
     date: '2026-05-19',
+    source: 'mofcom',
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const rows = [
     unit: '斤',
     market: '闵行区',
     date: '2026-05-18',
+    source: 'xinfadi',
   },
 ]
 
