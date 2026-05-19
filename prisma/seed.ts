@@ -1,6 +1,9 @@
+import 'dotenv/config'
+import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
   // 区域
@@ -41,9 +44,8 @@ async function main() {
     await prisma.qualityGrade.upsert({ where: { name: g.name }, update: {}, create: g })
   }
 
-  // 品种（按品类）
+  // 品种
   const products = [
-    // 蔬菜
     { name: '西红柿', category: '蔬菜', unit: '斤' },
     { name: '黄瓜', category: '蔬菜', unit: '斤' },
     { name: '茄子', category: '蔬菜', unit: '斤' },
@@ -52,42 +54,31 @@ async function main() {
     { name: '菠菜', category: '蔬菜', unit: '斤' },
     { name: '青椒', category: '蔬菜', unit: '斤' },
     { name: '大葱', category: '蔬菜', unit: '斤' },
-    // 水果
     { name: '苹果', category: '水果', unit: '斤' },
     { name: '香蕉', category: '水果', unit: '斤' },
     { name: '橙子', category: '水果', unit: '斤' },
     { name: '葡萄', category: '水果', unit: '斤' },
     { name: '西瓜', category: '水果', unit: '斤' },
-    // 猪肉
     { name: '猪里脊', category: '猪肉', unit: '斤' },
     { name: '猪五花', category: '猪肉', unit: '斤' },
     { name: '猪排骨', category: '猪肉', unit: '斤' },
-    // 牛羊肉
     { name: '牛腩', category: '牛羊肉', unit: '斤' },
     { name: '羊腿', category: '牛羊肉', unit: '斤' },
-    // 禽类
     { name: '整鸡', category: '禽类', unit: '斤' },
     { name: '鸭腿', category: '禽类', unit: '斤' },
-    // 水产
     { name: '草鱼', category: '水产', unit: '斤' },
     { name: '带鱼', category: '水产', unit: '斤' },
     { name: '虾', category: '水产', unit: '斤' },
-    // 蛋类
     { name: '鸡蛋', category: '蛋类', unit: '个' },
     { name: '鸭蛋', category: '蛋类', unit: '个' },
-    // 其他生鲜
     { name: '豆腐', category: '其他生鲜', unit: '斤' },
     { name: '年糕', category: '其他生鲜', unit: '斤' },
   ]
   for (const p of products) {
-    await prisma.product.upsert({
-      where: { name: p.name },
-      update: {},
-      create: p,
-    })
+    await prisma.product.upsert({ where: { name: p.name }, update: {}, create: p })
   }
 
-  console.log('Seed data inserted successfully.')
+  console.log('种子数据导入成功！')
 }
 
 main()

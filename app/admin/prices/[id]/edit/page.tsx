@@ -59,7 +59,7 @@ export default function EditPricePage() {
         const record = prices.find((price) => price.id === targetId)
 
         if (!record) {
-          throw new Error('Price record not found.')
+          throw new Error('未找到该价格记录。')
         }
 
         setReferences({ products, districts, origins, qualities })
@@ -74,7 +74,7 @@ export default function EditPricePage() {
         })
       } catch (loadError) {
         console.error(loadError)
-        setError('Unable to load the price record for editing.')
+        setError('价格记录加载失败，请刷新页面重试。')
       }
     }
 
@@ -86,9 +86,9 @@ export default function EditPricePage() {
       <AdminNav />
       <div className="space-y-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">Edit Price</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">编辑价格记录</h1>
           <p className="mt-2 text-sm text-zinc-500">
-            Update the selected price record and save the change through the existing prices API.
+            修改选中的价格记录并保存。
           </p>
         </div>
 
@@ -96,7 +96,7 @@ export default function EditPricePage() {
         <PriceForm
           {...references}
           initialValues={initialValues}
-          submitLabel="Update Price"
+          submitLabel="保存修改"
           onSubmit={async (values) => {
             const response = await fetch('/api/prices', {
               method: 'POST',
@@ -107,7 +107,7 @@ export default function EditPricePage() {
             })
 
             if (!response.ok) {
-              throw new Error('Failed to update price record.')
+              throw new Error('价格记录更新失败。')
             }
 
             router.push('/admin/prices')

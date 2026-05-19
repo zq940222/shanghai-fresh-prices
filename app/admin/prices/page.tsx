@@ -33,7 +33,7 @@ export default function AdminPricesPage() {
       try {
         const response = await fetch('/api/prices')
         if (!response.ok) {
-          throw new Error('Failed to load prices.')
+          throw new Error('价格数据加载失败。')
         }
 
         const payload: ApiPriceRow[] = await response.json()
@@ -50,7 +50,7 @@ export default function AdminPricesPage() {
         )
       } catch (loadError) {
         console.error(loadError)
-        setError('Unable to load price records.')
+        setError('价格数据加载失败，请检查数据库连接。')
       }
     }
 
@@ -67,16 +67,16 @@ export default function AdminPricesPage() {
       <div className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">Manage Prices</h1>
+            <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">价格管理</h1>
             <p className="mt-2 text-sm text-zinc-500">
-              Edit existing records or remove them from the current admin view.
+              编辑或删除现有价格记录。
             </p>
           </div>
           <Link
             href="/admin/prices/new"
             className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
           >
-            Add Price
+            新增价格
           </Link>
         </div>
 

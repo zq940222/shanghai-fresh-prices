@@ -52,7 +52,7 @@ export default function PriceForm({
   qualities,
   initialValues,
   onSubmit,
-  submitLabel = 'Save Price',
+  submitLabel = '保存',
 }: PriceFormProps) {
   const [values, setValues] = useState<PriceFormValues>({
     ...defaultValues,
@@ -79,7 +79,7 @@ export default function PriceForm({
     event.preventDefault()
 
     if (Object.values(values).some((value) => !String(value).trim())) {
-      setError('All fields are required.')
+      setError('所有字段均为必填项。')
       return
     }
 
@@ -98,7 +98,7 @@ export default function PriceForm({
       })
     } catch (submitError) {
       console.error(submitError)
-      setError('Unable to save the price record.')
+      setError('保存失败，请稍后重试。')
     } finally {
       setSubmitting(false)
     }
@@ -110,21 +110,21 @@ export default function PriceForm({
   return (
     <form className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm" onSubmit={handleSubmit}>
       <div className="mb-6">
-        <h2 className="text-xl font-semibold text-zinc-950">Price Record</h2>
+        <h2 className="text-xl font-semibold text-zinc-950">价格信息</h2>
         <p className="mt-2 text-sm text-zinc-500">
-          Create or update a price snapshot using the existing relational data model.
+          填写完整的价格记录，所有字段均为必填。
         </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <label className="flex flex-col gap-1 text-sm text-zinc-600">
-          <span>Product</span>
+          <span>品种</span>
           <select
             className={inputClassName}
             value={values.productId}
             onChange={(event) => updateValue('productId', event.target.value)}
           >
-            <option value="">Select product</option>
+            <option value="">请选择品种</option>
             {products.map((product) => (
               <option key={product.id} value={product.id}>
                 {product.name}
@@ -134,13 +134,13 @@ export default function PriceForm({
         </label>
 
         <label className="flex flex-col gap-1 text-sm text-zinc-600">
-          <span>Market</span>
+          <span>区域</span>
           <select
             className={inputClassName}
             value={values.districtId}
             onChange={(event) => updateValue('districtId', event.target.value)}
           >
-            <option value="">Select market</option>
+            <option value="">请选择区域</option>
             {districts.map((district) => (
               <option key={district.id} value={district.id}>
                 {district.name}
@@ -150,13 +150,13 @@ export default function PriceForm({
         </label>
 
         <label className="flex flex-col gap-1 text-sm text-zinc-600">
-          <span>Origin</span>
+          <span>产地</span>
           <select
             className={inputClassName}
             value={values.originId}
             onChange={(event) => updateValue('originId', event.target.value)}
           >
-            <option value="">Select origin</option>
+            <option value="">请选择产地</option>
             {origins.map((origin) => (
               <option key={origin.id} value={origin.id}>
                 {origin.name}
@@ -166,13 +166,13 @@ export default function PriceForm({
         </label>
 
         <label className="flex flex-col gap-1 text-sm text-zinc-600">
-          <span>Quality</span>
+          <span>品质等级</span>
           <select
             className={inputClassName}
             value={values.qualityId}
             onChange={(event) => updateValue('qualityId', event.target.value)}
           >
-            <option value="">Select quality</option>
+            <option value="">请选择品质</option>
             {qualities.map((quality) => (
               <option key={quality.id} value={quality.id}>
                 {quality.name}
@@ -182,31 +182,33 @@ export default function PriceForm({
         </label>
 
         <label className="flex flex-col gap-1 text-sm text-zinc-600">
-          <span>Wholesale Price</span>
+          <span>批发价（元/单位）</span>
           <input
             className={inputClassName}
             type="number"
             min="0"
             step="0.01"
+            placeholder="0.00"
             value={values.wholesalePrice}
             onChange={(event) => updateValue('wholesalePrice', event.target.value)}
           />
         </label>
 
         <label className="flex flex-col gap-1 text-sm text-zinc-600">
-          <span>Retail Price</span>
+          <span>零售价（元/单位）</span>
           <input
             className={inputClassName}
             type="number"
             min="0"
             step="0.01"
+            placeholder="0.00"
             value={values.retailPrice}
             onChange={(event) => updateValue('retailPrice', event.target.value)}
           />
         </label>
 
         <label className="flex flex-col gap-1 text-sm text-zinc-600 md:col-span-2">
-          <span>Date</span>
+          <span>日期</span>
           <input
             className={inputClassName}
             type="date"
@@ -224,7 +226,7 @@ export default function PriceForm({
           className="rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
           disabled={submitting}
         >
-          {submitting ? 'Saving...' : submitLabel}
+          {submitting ? '保存中...' : submitLabel}
         </button>
       </div>
     </form>

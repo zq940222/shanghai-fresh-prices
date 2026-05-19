@@ -21,20 +21,20 @@ export default function DataTable({ rows, onDelete }: DataTableProps) {
   return (
     <section className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
       <div className="border-b border-zinc-200 px-5 py-4">
-        <h2 className="text-lg font-semibold text-zinc-950">Price Records</h2>
+        <h2 className="text-lg font-semibold text-zinc-950">价格记录列表</h2>
       </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full text-left text-sm">
           <thead className="bg-zinc-50 text-zinc-500">
             <tr>
-              <th className="px-4 py-3 font-medium">Name</th>
-              <th className="px-4 py-3 font-medium">Category</th>
-              <th className="px-4 py-3 font-medium">Market</th>
-              <th className="px-4 py-3 font-medium">Price</th>
-              <th className="px-4 py-3 font-medium">Unit</th>
-              <th className="px-4 py-3 font-medium">Date</th>
-              <th className="px-4 py-3 font-medium">Actions</th>
+              <th className="px-4 py-3 font-medium">品种</th>
+              <th className="px-4 py-3 font-medium">品类</th>
+              <th className="px-4 py-3 font-medium">区域</th>
+              <th className="px-4 py-3 font-medium">价格</th>
+              <th className="px-4 py-3 font-medium">单位</th>
+              <th className="px-4 py-3 font-medium">日期</th>
+              <th className="px-4 py-3 font-medium">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -56,7 +56,7 @@ export default function DataTable({ rows, onDelete }: DataTableProps) {
                         href={`/admin/prices/${row.id}/edit`}
                         className="rounded-full border border-zinc-200 px-3 py-1.5 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-100"
                       >
-                        Edit
+                        编辑
                       </Link>
                       <button
                         type="button"
@@ -64,7 +64,7 @@ export default function DataTable({ rows, onDelete }: DataTableProps) {
                         onClick={() => onDelete?.(row.id)}
                         disabled={!onDelete}
                       >
-                        Delete
+                        删除
                       </button>
                     </div>
                   </td>
@@ -73,7 +73,7 @@ export default function DataTable({ rows, onDelete }: DataTableProps) {
             ) : (
               <tr>
                 <td colSpan={7} className="px-4 py-8 text-center text-zinc-500">
-                  No admin price records found.
+                  暂无价格记录，请先录入数据。
                 </td>
               </tr>
             )}

@@ -1,9 +1,9 @@
 import Link from 'next/link'
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/trends', label: 'Trends' },
-  { href: '/admin', label: 'Admin' },
+  { href: '/', label: '价格查询' },
+  { href: '/trends', label: '趋势图' },
+  { href: '/admin', label: '后台管理' },
 ]
 
 export default function NavBar() {
@@ -11,7 +11,7 @@ export default function NavBar() {
     <header className="border-b border-zinc-200 bg-white/90 backdrop-blur">
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="text-lg font-semibold tracking-tight text-zinc-950">
-          Shanghai Fresh Prices
+          🥬 上海生鲜价格系统
         </Link>
         <nav aria-label="Primary" className="flex items-center gap-2">
           {links.map((link) => (

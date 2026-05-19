@@ -37,7 +37,7 @@ export default function NewPricePage() {
         setReferences({ products, districts, origins, qualities })
       } catch (loadError) {
         console.error(loadError)
-        setError('Unable to load reference data.')
+        setError('参考数据加载失败，请刷新页面重试。')
       }
     }
 
@@ -49,16 +49,16 @@ export default function NewPricePage() {
       <AdminNav />
       <div className="space-y-4">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">Add Price</h1>
+          <h1 className="text-3xl font-semibold tracking-tight text-zinc-950">新增价格记录</h1>
           <p className="mt-2 text-sm text-zinc-500">
-            Create a new daily market price record.
+            录入当日市场生鲜批发价与零售价。
           </p>
         </div>
 
         {error ? <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p> : null}
         <PriceForm
           {...references}
-          submitLabel="Create Price"
+          submitLabel="保存记录"
           onSubmit={async (values) => {
             const response = await fetch('/api/prices', {
               method: 'POST',
@@ -69,7 +69,7 @@ export default function NewPricePage() {
             })
 
             if (!response.ok) {
-              throw new Error('Failed to create price record.')
+              throw new Error('价格记录创建失败。')
             }
 
             router.push('/admin/prices')

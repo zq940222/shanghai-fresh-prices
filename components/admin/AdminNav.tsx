@@ -4,9 +4,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const links = [
-  { href: '/admin', label: 'Dashboard' },
-  { href: '/admin/prices', label: 'Prices' },
-  { href: '/admin/prices/new', label: 'Add Price' },
+  { href: '/admin', label: '控制台' },
+  { href: '/admin/prices', label: '价格管理' },
+  { href: '/admin/prices/new', label: '新增价格' },
 ]
 
 export default function AdminNav() {
@@ -15,7 +15,7 @@ export default function AdminNav() {
   return (
     <aside className="rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm">
       <p className="px-3 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400">
-        Admin
+        后台管理
       </p>
       <nav className="mt-3 flex flex-col gap-2">
         {links.map((link) => {

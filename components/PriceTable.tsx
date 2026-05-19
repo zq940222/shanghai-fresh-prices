@@ -19,24 +19,30 @@ interface PriceTableProps {
 }
 
 function compareValues(a: string | number, b: string | number) {
-  if (typeof a === 'number' && typeof b === 'number') {
-    return a - b
-  }
+  if (typeof a === 'number' && typeof b === 'number') return a - b
+  return String(a).localeCompare(String(b), 'zh-CN', { sensitivity: 'base' })
+}
 
-  return String(a).localeCompare(String(b), 'en', { sensitivity: 'base' })
+const COLUMN_LABELS: Record<SortKey, string> = {
+  name: '品种',
+  category: '品类',
+  price: '价格',
+  unit: '单位',
+  market: '区域',
+  date: '日期',
 }
 
 export default function PriceTable({ rows }: PriceTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>('date')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
 
-  const columns: Array<{ key: SortKey; label: string }> = [
-    { key: 'name', label: 'Name' },
-    { key: 'category', label: 'Category' },
-    { key: 'price', label: 'Price' },
-    { key: 'unit', label: 'Unit' },
-    { key: 'market', label: 'Market' },
-    { key: 'date', label: 'Date' },
+  const columns: Array<{ key: SortKey }> = [
+    { key: 'name' },
+    { key: 'category' },
+    { key: 'price' },
+    { key: 'unit' },
+    { key: 'market' },
+    { key: 'date' },
   ]
 
   function toggleSort(nextKey: SortKey) {
@@ -44,7 +50,6 @@ export default function PriceTable({ rows }: PriceTableProps) {
       setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
       return
     }
-
     setSortKey(nextKey)
     setSortDirection(nextKey === 'date' ? 'desc' : 'asc')
   }
@@ -59,7 +64,7 @@ export default function PriceTable({ rows }: PriceTableProps) {
   return (
     <section className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
       <div className="border-b border-zinc-200 px-5 py-4">
-        <h2 className="text-lg font-semibold text-zinc-950">Latest Price Records</h2>
+        <h2 className="text-lg font-semibold text-zinc-950">最新价格记录</h2>
       </div>
 
       <div className="overflow-x-auto">
@@ -73,7 +78,7 @@ export default function PriceTable({ rows }: PriceTableProps) {
                     className="inline-flex items-center gap-2 transition hover:text-zinc-950"
                     onClick={() => toggleSort(column.key)}
                   >
-                    <span>{column.label}</span>
+                    <span>{COLUMN_LABELS[column.key]}</span>
                     {sortKey === column.key ? (
                       <span aria-hidden="true">{sortDirection === 'asc' ? '↑' : '↓'}</span>
                     ) : null}
@@ -85,10 +90,7 @@ export default function PriceTable({ rows }: PriceTableProps) {
           <tbody>
             {sortedRows.length > 0 ? (
               sortedRows.map((row, index) => (
-                <tr
-                  key={row.id}
-                  className={index % 2 === 0 ? 'bg-white' : 'bg-zinc-50/60'}
-                >
+                <tr key={row.id} className={index % 2 === 0 ? 'bg-white' : 'bg-zinc-50/60'}>
                   <td className="px-4 py-3 font-medium text-zinc-950">{row.name}</td>
                   <td className="px-4 py-3 text-zinc-600">{row.category}</td>
                   <td className="px-4 py-3 text-zinc-950">{row.price.toFixed(2)}</td>
@@ -100,7 +102,7 @@ export default function PriceTable({ rows }: PriceTableProps) {
             ) : (
               <tr>
                 <td colSpan={columns.length} className="px-4 py-8 text-center text-zinc-500">
-                  No price records found.
+                  暂无价格数据，请先录入或等待抓取任务运行。
                 </td>
               </tr>
             )}

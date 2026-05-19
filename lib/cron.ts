@@ -16,39 +16,27 @@ export async function runScraperJob() {
     for (const row of rows) {
       const product = await prisma.product.upsert({
         where: { name: row.name },
-        update: {
-          category: row.category,
-          unit: row.unit,
-        },
-        create: {
-          name: row.name,
-          category: row.category,
-          unit: row.unit,
-        },
+        update: { category: row.category, unit: row.unit },
+        create: { name: row.name, category: row.category, unit: row.unit },
       })
 
       const district = await prisma.district.upsert({
-        where: { name: row.market },
+        where: { name: row.district },
         update: {},
-        create: { name: row.market },
+        create: { name: row.district },
       })
 
+      // scraper data: local origin, ungraded quality
       const origin = await prisma.origin.upsert({
-        where: { name: 'Local' },
-        update: { province: 'Shanghai' },
-        create: {
-          name: 'Local',
-          province: 'Shanghai',
-        },
+        where: { name: '本地' },
+        update: {},
+        create: { name: '本地', province: '上海' },
       })
 
       const quality = await prisma.qualityGrade.upsert({
-        where: { name: 'Standard' },
-        update: { description: 'Imported from automated scraper.' },
-        create: {
-          name: 'Standard',
-          description: 'Imported from automated scraper.',
-        },
+        where: { name: '统货' },
+        update: {},
+        create: { name: '统货', description: '不分等级混装' },
       })
 
       await prisma.price.upsert({
@@ -62,8 +50,8 @@ export async function runScraperJob() {
           },
         },
         update: {
-          wholesalePrice: row.price,
-          retailPrice: row.price,
+          wholesalePrice: row.wholesalePrice,
+          retailPrice: row.retailPrice,
           source: 'scraper',
         },
         create: {
@@ -71,8 +59,8 @@ export async function runScraperJob() {
           districtId: district.id,
           originId: origin.id,
           qualityId: quality.id,
-          wholesalePrice: row.price,
-          retailPrice: row.price,
+          wholesalePrice: row.wholesalePrice,
+          retailPrice: row.retailPrice,
           priceDate: startOfDay(row.date),
           source: 'scraper',
         },
@@ -82,22 +70,15 @@ export async function runScraperJob() {
     }
 
     await prisma.scraperLog.create({
-      data: {
-        status: 'success',
-        totalCount: count,
-      },
+      data: { status: 'success', totalCount: count },
     })
 
     return { success: true, count }
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown scraper error.'
+    const message = error instanceof Error ? error.message : '未知错误'
 
     await prisma.scraperLog.create({
-      data: {
-        status: 'failed',
-        totalCount: 0,
-        errorMsg: message,
-      },
+      data: { status: 'failed', totalCount: 0, errorMsg: message },
     })
 
     throw error

@@ -24,7 +24,8 @@ export async function GET(req: NextRequest) {
       take: 200,
     })
     return NextResponse.json(prices)
-  } catch {
+  } catch (e) {
+    console.error('[GET /api/prices]', e)
     return NextResponse.json({ error: '服务器内部错误' }, { status: 500 })
   }
 }
