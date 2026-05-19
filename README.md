@@ -29,8 +29,30 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy to Tencent Cloud
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This repo uses GitHub Actions CD to build a Docker image after CI succeeds, push it to GitHub Container Registry, and restart the app on a Tencent Cloud server with Docker Compose.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Required GitHub repository secrets:
+
+- `SERVER_HOST`: Tencent Cloud server IP or host.
+- `SERVER_USER`: SSH user.
+- `SERVER_SSH_KEY`: private key for SSH login.
+- `DEPLOY_PATH`: directory on the server that contains `docker-compose.yml` and `.env`.
+- `DEPLOY_PORT`: optional SSH port, defaults to `22`.
+
+Optional GitHub repository variable:
+
+- `PRODUCTION_URL`: production URL shown in the GitHub deployment environment.
+
+Initial server setup:
+
+```bash
+mkdir -p /opt/shanghai-fresh-prices
+cd /opt/shanghai-fresh-prices
+# Copy this repo's docker-compose.yml here.
+# Create .env with DATABASE_URL and any optional runtime variables.
+# The default host port is 3002, mapped to container port 3000.
+```
+
+If PostgreSQL runs directly on the same Tencent Cloud host instead of inside Docker, use `host.docker.internal` in `DATABASE_URL`; `docker-compose.yml` maps it to the Docker host gateway on Linux.
