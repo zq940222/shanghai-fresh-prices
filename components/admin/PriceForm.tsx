@@ -61,12 +61,12 @@ export default function PriceForm({
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
+  /* eslint-disable react-hooks/set-state-in-effect */
+  // Sync form when initialValues changes (edit page loads data asynchronously)
   useEffect(() => {
-    setValues({
-      ...defaultValues,
-      ...initialValues,
-    })
+    setValues({ ...defaultValues, ...initialValues })
   }, [initialValues])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   function updateValue(key: keyof PriceFormValues, value: string) {
     setValues((current) => ({

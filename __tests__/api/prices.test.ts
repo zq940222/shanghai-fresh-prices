@@ -37,7 +37,7 @@ describe('GET /api/prices', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('returns prices with relations', async () => {
-    vi.mocked(prisma.price.findMany).mockResolvedValue([mockPrice] as any)
+    vi.mocked(prisma.price.findMany).mockResolvedValue([mockPrice] as never)
     const res = await getPrices(new Request('http://localhost/api/prices'))
     const data = await res.json()
     expect(res.status).toBe(200)
@@ -56,7 +56,7 @@ describe('GET /api/prices', () => {
 
 describe('POST /api/prices', () => {
   it('upserts a price record', async () => {
-    vi.mocked(prisma.price.upsert).mockResolvedValue(mockPrice as any)
+    vi.mocked(prisma.price.upsert).mockResolvedValue(mockPrice as never)
     const req = new Request('http://localhost/api/prices', {
       method: 'POST',
       body: JSON.stringify({

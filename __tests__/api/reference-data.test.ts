@@ -27,7 +27,7 @@ describe('GET /api/products', () => {
     const mockProducts = [
       { id: 1, name: '西红柿', category: '蔬菜', unit: '斤', createdAt: '2026-01-01T00:00:00.000Z' },
     ]
-    vi.mocked(prisma.product.findMany).mockResolvedValue(mockProducts as any)
+    vi.mocked(prisma.product.findMany).mockResolvedValue(mockProducts as never)
 
     const res = await getProducts(new Request('http://localhost/api/products'))
     const data = await res.json()
@@ -54,7 +54,7 @@ describe('GET /api/products', () => {
 describe('POST /api/products', () => {
   it('creates a new product', async () => {
     const newProduct = { id: 2, name: '黄瓜', category: '蔬菜', unit: '斤', createdAt: '2026-01-01T00:00:00.000Z' }
-    vi.mocked(prisma.product.create).mockResolvedValue(newProduct as any)
+    vi.mocked(prisma.product.create).mockResolvedValue(newProduct as never)
 
     const req = new Request('http://localhost/api/products', {
       method: 'POST',
@@ -98,7 +98,7 @@ describe('GET /api/districts', () => {
   it('returns all districts', async () => {
     vi.mocked(prisma.district.findMany).mockResolvedValue([
       { id: 1, name: '浦东新区' },
-    ] as any)
+    ] as never)
     const res = await getDistricts(new Request('http://localhost/api/districts'))
     expect(res.status).toBe(200)
   })
