@@ -7,7 +7,10 @@ vi.mock('@/lib/prisma', () => ({
       findMany: vi.fn(),
       create: vi.fn(),
     },
-    district: { findMany: vi.fn() },
+    district: {
+      findMany: vi.fn(),
+      create: vi.fn(),
+    },
     origin: { findMany: vi.fn() },
     qualityGrade: { findMany: vi.fn() },
   },
@@ -71,6 +74,23 @@ describe('POST /api/products', () => {
     })
     const res = await postProduct(req)
     expect(res.status).toBe(400)
+  })
+
+  it('returns 409 if product name already exists', async () => {
+    const { Prisma } = await import('@prisma/client')
+    const err = new Prisma.PrismaClientKnownRequestError('Unique constraint failed', {
+      code: 'P2002',
+      clientVersion: '0.0.0',
+      meta: {},
+    })
+    vi.mocked(prisma.product.create).mockRejectedValue(err)
+
+    const req = new Request('http://localhost/api/products', {
+      method: 'POST',
+      body: JSON.stringify({ name: '西红柿', category: '蔬菜' }),
+    })
+    const res = await postProduct(req)
+    expect(res.status).toBe(409)
   })
 })
 
