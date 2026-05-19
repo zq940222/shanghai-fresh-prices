@@ -15,8 +15,8 @@ describe('NavBar', () => {
   it('renders the primary navigation links', () => {
     render(<NavBar />)
 
-    expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('href', '/')
-    expect(screen.getByRole('link', { name: 'Trends' })).toHaveAttribute('href', '/trends')
-    expect(screen.getByRole('link', { name: 'Admin' })).toHaveAttribute('href', '/admin')
+    expect(screen.getByRole('link', { name: '价格查询' })).toHaveAttribute('href', '/')
+    expect(screen.getByRole('link', { name: '趋势图' })).toHaveAttribute('href', '/trends')
+    expect(screen.getByRole('link', { name: '后台管理' })).toHaveAttribute('href', '/admin')
   })
 })

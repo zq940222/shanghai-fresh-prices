@@ -13,12 +13,12 @@ describe('StatsCards', () => {
       />
     )
 
-    expect(screen.getByText('Total Records')).toBeInTheDocument()
+    expect(screen.getByText('价格记录总数')).toBeInTheDocument()
     expect(screen.getByText('1,200')).toBeInTheDocument()
-    expect(screen.getByText('Categories')).toBeInTheDocument()
+    expect(screen.getByText('品类数')).toBeInTheDocument()
     expect(screen.getByText('8')).toBeInTheDocument()
-    expect(screen.getByText('Markets')).toBeInTheDocument()
+    expect(screen.getByText('覆盖区域数')).toBeInTheDocument()
     expect(screen.getByText('16')).toBeInTheDocument()
-    expect(screen.getByText('Latest Update')).toBeInTheDocument()
+    expect(screen.getByText('最新更新')).toBeInTheDocument()
   })
 })
