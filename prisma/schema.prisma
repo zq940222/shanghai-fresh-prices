@@ -4,6 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Product {
@@ -14,6 +15,8 @@ model Product {
   createdAt DateTime @default(now())
   prices    Price[]
 
+  @@unique([name])
+  @@index([category])
   @@map("products")
 }
 
@@ -60,6 +63,8 @@ model Price {
   createdAt      DateTime     @default(now())
 
   @@unique([productId, districtId, originId, qualityId, priceDate])
+  @@index([productId, priceDate])
+  @@index([productId, districtId, priceDate])
   @@map("prices")
 }
 
@@ -70,5 +75,7 @@ model ScraperLog {
   totalCount Int      @default(0)
   errorMsg   String?
 
+  @@index([runAt])
+  @@index([status])
   @@map("scraper_logs")
 }

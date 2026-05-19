@@ -80,7 +80,11 @@ async function main() {
     { name: '年糕', category: '其他生鲜', unit: '斤' },
   ]
   for (const p of products) {
-    await prisma.product.create({ data: p }).catch(() => {})
+    await prisma.product.upsert({
+      where: { name: p.name },
+      update: {},
+      create: p,
+    })
   }
 
   console.log('Seed data inserted successfully.')
