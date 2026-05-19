@@ -1,13 +1,74 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model Product {
+  id        Int      @id @default(autoincrement())
+  name      String
+  category  String
+  unit      String   @default("斤")
+  createdAt DateTime @default(now())
+  prices    Price[]
+
+  @@map("products")
+}
+
+model District {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  prices Price[]
+
+  @@map("districts")
+}
+
+model Origin {
+  id       Int     @id @default(autoincrement())
+  name     String  @unique
+  province String  @default("")
+  prices   Price[]
+
+  @@map("origins")
+}
+
+model QualityGrade {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String  @default("")
+  prices      Price[]
+
+  @@map("quality_grades")
+}
+
+model Price {
+  id             Int          @id @default(autoincrement())
+  product        Product      @relation(fields: [productId], references: [id])
+  productId      Int
+  district       District     @relation(fields: [districtId], references: [id])
+  districtId     Int
+  origin         Origin       @relation(fields: [originId], references: [id])
+  originId       Int
+  quality        QualityGrade @relation(fields: [qualityId], references: [id])
+  qualityId      Int
+  wholesalePrice Decimal      @db.Decimal(10, 2)
+  retailPrice    Decimal      @db.Decimal(10, 2)
+  priceDate      DateTime     @db.Date
+  source         String       @default("manual")
+  createdAt      DateTime     @default(now())
+
+  @@unique([productId, districtId, originId, qualityId, priceDate])
+  @@map("prices")
+}
+
+model ScraperLog {
+  id         Int      @id @default(autoincrement())
+  runAt      DateTime @default(now())
+  status     String
+  totalCount Int      @default(0)
+  errorMsg   String?
+
+  @@map("scraper_logs")
 }
